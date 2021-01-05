@@ -3,10 +3,10 @@ from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import random
-
 from models import setup_db, Question, Category
 
 QUESTIONS_PER_PAGE = 10
+
 
 def create_app(test_config=None):
   # create and configure the app
@@ -31,25 +31,66 @@ def create_app(test_config=None):
     return response
 
 
-  '''
-  @TODO: 
-  Create an endpoint to handle GET requests 
-  for all available categories.
-  '''
+  @app.route('/categories', methods=['GET'])
+  def get_categories():
+    '''
+    @TODO: 
+    Create an endpoint to handle GET requests 
+    for all available categories.
+    '''
+    categories = Category.query.order_by(Category.id).all()
+    formatted_categories = [category.format() for category in categories]
+
+    if len(categories) == 0:
+      abort(404)
+    
+    return jsonify({
+      'success': True, 
+      'categories': formatted_categories
+    })
 
 
-  '''
-  @TODO: 
-  Create an endpoint to handle GET requests for questions, 
-  including pagination (every 10 questions). 
-  This endpoint should return a list of questions, 
-  number of total questions, current category, categories. 
 
-  TEST: At this point, when you start the application
-  you should see questions and categories generated,
-  ten questions per page and pagination at the bottom of the screen for three pages.
-  Clicking on the page numbers should update the questions. 
-  '''
+  def paginate_questions(request, selection):
+    # Pagination
+    page = request.args.get('page', 1, type=int)
+    start = (page - 1) * QUESTIONS_PER_PAGE
+    end = start + QUESTIONS_PER_PAGE
+
+    current_questions = [question.format() for question in selection[start:end]]
+
+    return current_questions
+
+
+  @app.route('/questions', methods=['GET'])
+  def get_questions():
+    '''
+    @TODO: 
+    Create an endpoint to handle GET requests for questions, 
+    including pagination (every 10 questions). 
+    This endpoint should return a list of questions, 
+    number of total questions, current category, categories. 
+
+    TEST: At this point, when you start the application
+    you should see questions and categories generated,
+    ten questions per page and pagination at the bottom of the screen for three pages.
+    Clicking on the page numbers should update the questions. 
+    '''
+    selection = Question.query.order_by(Question.id).all()
+    current_questions = paginate_questions(request, selection)
+
+    if len(current_questions) == 0:
+      abort(404)
+    
+    return jsonify({
+      'success': True, 
+      'questions': current_questions, 
+      'total_questions': len(selection), 
+      # 'current_category': , 
+      # 'categories': 
+    })
+
+
 
   '''
   @TODO: 
