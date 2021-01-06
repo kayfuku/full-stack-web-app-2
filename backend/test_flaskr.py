@@ -25,9 +25,11 @@ class TriviaTestCase(unittest.TestCase):
       # create all tables
       self.db.create_all()
 
+
   def tearDown(self):
     """Executed after reach test"""
     pass
+
 
   """
   TODO
@@ -42,6 +44,7 @@ class TriviaTestCase(unittest.TestCase):
     self.assertTrue(data['total_questions'])
     self.assertTrue(len(data['questions']))
 
+
   def test_get_categories(self):
     res = self.client().get('/categories')
     data = json.loads(res.data)
@@ -49,6 +52,7 @@ class TriviaTestCase(unittest.TestCase):
     self.assertEqual(res.status_code, 200)
     self.assertEqual(data['success'], True)
     self.assertTrue(len(data['categories']))
+
 
   def test_404_sent_requesting_invalid_page(self):
     res = self.client().get('/plants?page=1000')
@@ -58,6 +62,21 @@ class TriviaTestCase(unittest.TestCase):
     self.assertEqual(data['success'], False)
     self.assertEqual(data['message'], 'resource not found')
 
+
+  # def test_delete_question(self):
+  #   res = self.client().delete('/questions/4')
+  #   data = json.loads(res.data)
+
+  #   question = Question.query.filter(Question.id == 1).one_or_none()
+
+  #   self.assertEqual(res.status_code, 200)
+  #   self.assertEqual(data['success'], True)
+  #   self.assertEqual(data['deleted'], 4)
+  #   self.assertTrue(data['total_questions'])
+  #   self.assertTrue(len(data['questions']))
+  #   self.assertEqual(question, None)
+
+  
 
 
 
