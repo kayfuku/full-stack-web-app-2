@@ -57,9 +57,7 @@ def create_app(test_config=None):
     start = (page - 1) * QUESTIONS_PER_PAGE
     end = start + QUESTIONS_PER_PAGE
 
-    current_questions = [question.format() for question in selection[start:end]]
-
-    return current_questions
+    return selection[start:end]
 
 
   @app.route('/questions', methods=['GET'])
@@ -77,7 +75,7 @@ def create_app(test_config=None):
     Clicking on the page numbers should update the questions. 
     '''
     selection = Question.query.order_by(Question.id).all()
-    current_questions = paginate_questions(request, selection)
+    current_questions = [question.format() for question in paginate_questions(request, selection)]
 
     current_category = []
     categories = [category.format() for category in Category.query.all()]
