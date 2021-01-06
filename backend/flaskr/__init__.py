@@ -150,15 +150,15 @@ def create_app(test_config=None):
     new_answer = body.get('answer', None)
     new_category = body.get('category', None)
     new_difficulty = body.get('difficulty', None)
-    search = body.get('search', None)
+    search_term = body.get('search_term', None)
     # print('converting types..')
     if new_difficulty:
       new_difficulty = int(new_difficulty)
 
     try:
-      if search:
-        print('searching.. {}'.format(search))
-        selection = Question.query.order_by(Question.id).filter(Question.name.ilike('%{}%'.format(search))).all()
+      if search_term:
+        print('searching.. {}'.format(search_term))
+        selection = Question.query.order_by(Question.id).filter(Question.question.ilike('%{}%'.format(search_term))).all()
         print('len(selection):', len(selection))
         print('paginating..')
         current_questions = [question.format() for question in paginate_questions(request, selection)]

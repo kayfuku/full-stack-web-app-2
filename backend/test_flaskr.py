@@ -84,28 +84,28 @@ class TriviaTestCase(unittest.TestCase):
   #   self.assertEqual(question, None)
 
 
-  def test_create_new_question(self):
-    res = self.client().post('/questions', json=self.new_question)
-    data = json.loads(res.data)
+  # def test_create_new_question(self):
+  #   res = self.client().post('/questions', json=self.new_question)
+  #   data = json.loads(res.data)
 
-    self.assertEqual(res.status_code, 200)
-    self.assertEqual(data['success'], True)
-    self.assertTrue(data['created'])
-    self.assertTrue(len(data['questions']))
+  #   self.assertEqual(res.status_code, 200)
+  #   self.assertEqual(data['success'], True)
+  #   self.assertTrue(data['created'])
+  #   self.assertTrue(len(data['questions']))
 
 
   def test_get_question_search_with_results(self):
-    res = self.client().post('/questions', json={'search': 'what'})
+    res = self.client().post('/questions', json={'search_term': 'what'})
     data = json.loads(res.data)
 
     self.assertEqual(res.status_code, 200)
     self.assertEqual(data['success'], True)
     self.assertTrue(data['total_questions'])
-    self.assertEqual(len(data['questions']), 5)
+    self.assertEqual(len(data['questions']), 7)
 
 
   def test_get_question_search_without_results(self):
-    res = self.client().post('/questions', json={'search': 'xxx'})
+    res = self.client().post('/questions', json={'search_term': 'xxx'})
     data = json.loads(res.data)
 
     self.assertEqual(res.status_code, 200)
