@@ -11,4 +11,5 @@ venv
 .Trashes
 ehthumbs.db
 Thumbs.db
-starter/frontend/node_modules/
+frontend/node_modules/
+.python-version
