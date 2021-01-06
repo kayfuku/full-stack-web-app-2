@@ -121,16 +121,71 @@ def create_app(test_config=None):
         abort(422)
 
 
-  '''
-  @TODO: 
-  Create an endpoint to POST a new question, 
-  which will require the question and answer text, 
-  category, and difficulty score.
+  @app.route('/questions', methods=['POST'])
+  def create_question():
+    '''
+    @TODO: 
+    Create an endpoint to POST a new question, 
+    which will require the question and answer text, 
+    category, and difficulty score.
 
-  TEST: When you submit a question on the "Add" tab, 
-  the form will clear and the question will appear at the end of the last page
-  of the questions list in the "List" tab.  
-  '''
+    TEST: When you submit a question on the "Add" tab, 
+    the form will clear and the question will appear at the end of the last page
+    of the questions list in the "List" tab.  
+    '''
+
+    body = request.get_json()
+
+    # print('getting values..')
+    new_question = body.get('question', None)
+    new_answer = body.get('answer', None)
+    new_category = body.get('category', None)
+    new_difficulty = body.get('difficulty', None)
+    search = body.get('search', None)
+    # print('converting types..')
+    if new_difficulty:
+      new_difficulty = int(new_difficulty)
+
+    try:
+      if search:
+        print('searching.. {}'.format(search))
+        selection = Question.query.order_by(Question.id).filter(Question.name.ilike('%{}%'.format(search))).all()
+        print('len(selection):', len(selection))
+        print('paginating..')
+        current_questions = [question.format() for question in paginate_questions(request, selection)]
+
+        print('return')
+        return jsonify({
+          'success': True, 
+          'questions': current_questions, 
+          'total_questions': len(selection)
+        })
+
+      else:
+        print('creating a question instance..')
+        question = Question(
+          question=new_question, 
+          answer=new_answer, 
+          category=new_category, 
+          difficulty=new_difficulty
+        )
+        print('inserting the question instance..')
+        question.insert()
+        print('inserted.')
+
+        selection = Question.query.order_by(Question.id).all()
+        current_questions = [question.format() for question in paginate_questions(request, selection)]
+
+        return jsonify({
+          'success': True, 
+          'created': question.id, 
+          'questions': current_questions, 
+          'total_questions': len(Question.query.all())
+        })
+
+    except:
+      abort(422)
+
 
   '''
   @TODO: 

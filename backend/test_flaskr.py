@@ -25,6 +25,13 @@ class TriviaTestCase(unittest.TestCase):
       # create all tables
       self.db.create_all()
 
+    self.new_question = {
+      'question': 'q1',
+      'answer': 'a1',
+      'category': '1', 
+      'difficulty': 1
+    }
+
 
   def tearDown(self):
     """Executed after reach test"""
@@ -55,7 +62,7 @@ class TriviaTestCase(unittest.TestCase):
 
 
   def test_404_sent_requesting_invalid_page(self):
-    res = self.client().get('/plants?page=1000')
+    res = self.client().get('/questions?page=1000')
     data = json.loads(res.data)
 
     self.assertEqual(res.status_code, 404)
@@ -76,7 +83,17 @@ class TriviaTestCase(unittest.TestCase):
   #   self.assertTrue(len(data['questions']))
   #   self.assertEqual(question, None)
 
-  
+
+  def test_create_new_question(self):
+    res = self.client().post('/questions', json=self.new_question)
+    data = json.loads(res.data)
+
+    self.assertEqual(res.status_code, 200)
+    self.assertEqual(data['success'], True)
+    self.assertTrue(data['created'])
+    self.assertTrue(len(data['questions']))
+
+
 
 
 
