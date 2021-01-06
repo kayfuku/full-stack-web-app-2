@@ -109,7 +109,7 @@ def create_app(test_config=None):
       try: 
         question.delete()
         selection = Question.query.order_by(Question.id).all()
-        current_questions = paginate_questions(request, selection)
+        current_questions = [question.format() for question in paginate_questions(request, selection)]
 
         return jsonify({
           'success': True, 
@@ -120,10 +120,6 @@ def create_app(test_config=None):
 
       except:
         abort(422)
-
-
-
-
 
 
   '''

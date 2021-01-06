@@ -41,3 +41,7 @@ form {
 .categories-list li {
   cursor: pointer;
 }
+
+.pagination-menu {
+  cursor: pointer;
+}
