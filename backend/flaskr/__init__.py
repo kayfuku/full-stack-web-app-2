@@ -144,17 +144,17 @@ def create_app(test_config=None):
 
     body = request.get_json()
 
-    # print('getting values..')
-    new_question = body.get('question', None)
-    new_answer = body.get('answer', None)
-    new_category = body.get('category', None)
-    new_difficulty = body.get('difficulty', None)
-    search_term = body.get('search_term', None)
-    # print('converting types..')
-    if new_difficulty:
-      new_difficulty = int(new_difficulty)
-
     try:
+      # print('getting values..')
+      new_question = body.get('question', None)
+      new_answer = body.get('answer', None)
+      new_category = body.get('category', None)
+      new_difficulty = body.get('difficulty', None)
+      search_term = body.get('search_term', None)
+      # print('converting types..')
+      if new_difficulty:
+        new_difficulty = int(new_difficulty)
+
       if search_term:
         # print('searching.. {}'.format(search_term))
         selection = Question.query.order_by(Question.id).filter(Question.question.ilike('%{}%'.format(search_term))).all()
