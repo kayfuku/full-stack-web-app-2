@@ -205,6 +205,23 @@ def create_app(test_config=None):
     categories in the left column will cause only questions of that 
     category to be shown. 
     '''
+    selection = Question.query.filter(Question.category == category_id).order_by(Question.id).all()
+    current_questions = [question.format() for question in paginate_questions(request, selection)]
+    if len(current_questions) == 0:
+      abort(404)
+
+    current_category = Category.query.get(category_id)
+    # print('category:', current_category)
+    if current_category is None:
+      abort(404)
+
+    return jsonify({
+      'success': True, 
+      'questions': current_questions, 
+      'total_questions': len(selection), 
+      'current_category': current_category.format()
+    })
+
 
 
 
