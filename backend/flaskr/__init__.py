@@ -241,7 +241,7 @@ def create_app(test_config=None):
     quiz_category = body.get('quiz_category', None)
 
     if quiz_category is None:
-      abort(404)
+      abort(400)
 
     try:
       questions = Question.query\
