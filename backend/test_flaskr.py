@@ -153,6 +153,17 @@ class TriviaTestCase(unittest.TestCase):
     self.assertTrue(len(data['question']))
 
 
+  def test_get_questions_for_invalid_category(self):
+    res = self.client().post('/quizzes', json={
+      'previous_questions': [], 
+      'quiz_category': {'id': 100, 'type': 'Science'}})
+    data = json.loads(res.data)
+
+    self.assertEqual(res.status_code, 200)
+    self.assertEqual(data['success'], True)
+    self.assertEqual(data['question'], None)
+
+
 
 
 
