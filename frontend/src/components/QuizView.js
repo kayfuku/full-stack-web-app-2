@@ -6,7 +6,7 @@ import '../stylesheets/QuizView.css';
 const questionsPerPlay = 5; 
 
 class QuizView extends Component {
-  constructor(props){
+  constructor(props) {
     super();
     this.state = {
         quizCategory: null,
@@ -20,7 +20,7 @@ class QuizView extends Component {
     }
   }
 
-  componentDidMount(){
+  componentDidMount() {
     $.ajax({
       url: `/categories`, //TODO: update request URL
       type: "GET",
@@ -45,7 +45,9 @@ class QuizView extends Component {
 
   getNextQuestion = () => {
     const previousQuestions = [...this.state.previousQuestions]
-    if(this.state.currentQuestion.id) { previousQuestions.push(this.state.currentQuestion.id) }
+    if (this.state.currentQuestion.id) { 
+      previousQuestions.push(this.state.currentQuestion.id)
+    }
 
     $.ajax({
       url: '/quizzes', //TODO: update request URL
@@ -80,7 +82,7 @@ class QuizView extends Component {
   submitGuess = (event) => {
     event.preventDefault();
     const formatGuess = this.state.guess.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").toLowerCase()
-    let evaluate =  this.evaluateAnswer()
+    let evaluate = this.evaluateAnswer()
     this.setState({
       numCorrect: !evaluate ? this.state.numCorrect : this.state.numCorrect + 1,
       showAnswer: true,
@@ -99,29 +101,30 @@ class QuizView extends Component {
     })
   }
 
-  renderPrePlay(){
-      return (
-          <div className="quiz-play-holder">
-              <div className="choose-header">Choose Category</div>
-              <div className="category-holder">
-                  <div className="play-category" onClick={this.selectCategory}>ALL</div>
-                  {Object.keys(this.state.categories).map(id => {
-                  return (
-                    <div
-                      key={id}
-                      value={id}
-                      className="play-category"
-                      onClick={() => this.selectCategory({type:this.state.categories[id], id})}>
-                      {this.state.categories[id]}
-                    </div>
-                  )
-                })}
+  renderPrePlay() {
+    return (
+      <div className="quiz-play-holder">
+        <div className="choose-header">Choose Category</div>
+        <div className="category-holder">
+          <div className="play-category" onClick={this.selectCategory}>ALL</div>
+          {this.state.categories.map((category) => {
+            return (
+              <div
+                key={category.id}
+                value={category.id}
+                className="play-category"
+                onClick={() => this.selectCategory(category)}
+              >
+                {category.type}
               </div>
-          </div>
-      )
+            )
+          })}
+        </div>
+      </div>
+    )
   }
 
-  renderFinalScore(){
+  renderFinalScore() {
     return(
       <div className="quiz-play-holder">
         <div className="final-header"> Your Final Score is {this.state.numCorrect}</div>
@@ -131,25 +134,34 @@ class QuizView extends Component {
   }
 
   evaluateAnswer = () => {
-    const formatGuess = this.state.guess.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").toLowerCase()
+    const formatGuess = this.state.guess.trim().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").toLowerCase()
+    if (formatGuess == "the") {
+      return false;
+    }
     const answerArray = this.state.currentQuestion.answer.toLowerCase().split(' ');
-    return answerArray.includes(formatGuess)
+    return answerArray.includes(formatGuess) || (formatGuess == this.state.currentQuestion.answer.trim().toLowerCase())
   }
 
-  renderCorrectAnswer(){
+  renderCorrectAnswer() {
     const formatGuess = this.state.guess.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").toLowerCase()
-    let evaluate =  this.evaluateAnswer()
-    return(
+    let evaluate = this.evaluateAnswer()
+    return (
       <div className="quiz-play-holder">
         <div className="quiz-question">{this.state.currentQuestion.question}</div>
-        <div className={`${evaluate ? 'correct' : 'wrong'}`}>{evaluate ? "You were correct!" : "You were incorrect"}</div>
+        <div className="guess">{this.state.guess}</div>
+        <div className={`${evaluate ? "correct" : "wrong"}`}>
+          {evaluate ? "You were correct!" : "You were incorrect"}
+        </div>
         <div className="quiz-answer">{this.state.currentQuestion.answer}</div>
-        <div className="next-question button" onClick={this.getNextQuestion}> Next Question </div>
+        <div className="next-question button" onClick={this.getNextQuestion}>
+          {" "}
+          Next Question{" "}
+        </div>
       </div>
-    )
+    );
   }
 
-  renderPlay(){
+  renderPlay() {
     return this.state.previousQuestions.length === questionsPerPlay || this.state.forceEnd
       ? this.renderFinalScore()
       : this.state.showAnswer 
