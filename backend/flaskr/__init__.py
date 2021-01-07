@@ -303,6 +303,15 @@ def create_app(test_config=None):
     }), 405
 
 
+  @app.errorhandler(500)
+  def method_not_allowed(error):
+    return jsonify({
+      "success": False, 
+      "error": 500, 
+      "message": "internal server error"
+    }), 500
+
+
   
   return app
 
