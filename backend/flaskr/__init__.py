@@ -39,11 +39,11 @@ def create_app(test_config=None):
     for all available categories.
     '''
     categories = Category.query.order_by(Category.id).all()
-    formatted_categories = [category.format() for category in categories]
-
     if len(categories) == 0:
       abort(404)
-    
+
+    formatted_categories = [category.format() for category in categories]
+
     return jsonify({
       'success': True, 
       'categories': formatted_categories
@@ -75,12 +75,11 @@ def create_app(test_config=None):
     '''
     selection = Question.query.order_by(Question.id).all()
     current_questions = [question.format() for question in paginate_questions(request, selection)]
+    if len(current_questions) == 0:
+      abort(404)
 
     current_category = []
     categories = [category.format() for category in Category.query.all()]
-
-    if len(current_questions) == 0:
-      abort(404)
     
     return jsonify({
       'success': True, 
@@ -157,13 +156,13 @@ def create_app(test_config=None):
 
     try:
       if search_term:
-        print('searching.. {}'.format(search_term))
+        # print('searching.. {}'.format(search_term))
         selection = Question.query.order_by(Question.id).filter(Question.question.ilike('%{}%'.format(search_term))).all()
-        print('len(selection):', len(selection))
-        print('paginating..')
+        # print('len(selection):', len(selection))
+        # print('paginating..')
         current_questions = [question.format() for question in paginate_questions(request, selection)]
 
-        print('return')
+        # print('return')
         return jsonify({
           'success': True, 
           'questions': current_questions, 
@@ -171,14 +170,14 @@ def create_app(test_config=None):
         })
 
       else:
-        print('creating a question instance..')
+        # print('creating a question instance..')
         question = Question(
           question=new_question, 
           answer=new_answer, 
           category=new_category, 
           difficulty=new_difficulty
         )
-        print('inserting the question instance..')
+        # print('inserting the question instance..')
         question.insert()
         print('inserted.')
 
@@ -196,14 +195,22 @@ def create_app(test_config=None):
       abort(422)
 
 
-  '''
-  @TODO: 
-  Create a GET endpoint to get questions based on category. 
+  @app.route('/categories/<int:category_id>/questions', methods=['GET'])
+  def get_questions_by_category(category_id):
+    '''
+    @TODO: 
+    Create a GET endpoint to get questions based on category. 
 
-  TEST: In the "List" tab / main screen, clicking on one of the 
-  categories in the left column will cause only questions of that 
-  category to be shown. 
-  '''
+    TEST: In the "List" tab / main screen, clicking on one of the 
+    categories in the left column will cause only questions of that 
+    category to be shown. 
+    '''
+
+
+
+
+
+
 
 
   '''
