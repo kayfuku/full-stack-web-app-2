@@ -133,6 +133,15 @@ class TriviaTestCase(unittest.TestCase):
     self.assertEqual(len(data['questions']), 5)
 
   
+  def test_400_for_invalid_category(self):
+    res = self.client().get('/categories/100/questions')
+    data = json.loads(res.data)
+
+    self.assertEqual(res.status_code, 400)
+    self.assertEqual(data['success'], False)
+    self.assertEqual(data['message'], 'bad request')
+
+
   # def get_questions_for_quiz():
   #   res = self.client().get('/quizzes', json={'previous_questions': []})
   #   data = json.loads(res.data)
