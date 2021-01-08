@@ -357,7 +357,7 @@ The API will return three error types when requests fail:
 
 #### POST /quizzes
 - General:
-    - Takes quiz category and previous questions parameters and returns a random questions within the given category, if provided, and that is not one of the previous questions.  
+    - Takes quiz category and previous questions parameters and returns a random question within the given category, if provided, and that is not one of the previous questions.  
 
 - Sample: `curl -X POST "http://127.0.0.1:5000/quizzes" -H "Content-Type: application/json" -d '{"quiz_category":{"id": 1, "type": "Science"}, "previous_questions": []}'`
 
@@ -373,8 +373,9 @@ The API will return three error types when requests fail:
   "success": true
 }
 ```
-
-
+  
+  
+  
 ## Deployment N/A
 
 ## Authors
