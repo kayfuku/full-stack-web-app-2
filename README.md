@@ -309,33 +309,68 @@ The API will return three error types when requests fail:
   "success": true, 
   "total_questions": 22
 }
+```  
 
-
-
-
-
-
-
-
-
-
-#### POST /books
+#### GET /categories/<category_id>/questions  
 - General:
-    - Creates a new book using the submitted title, author and rating. Returns the id of the created book, success value, total books, and book list based on current page number to update the frontend. 
-- `curl http://127.0.0.1:5000/books?page=3 -X POST -H "Content-Type: application/json" -d '{"title":"Neverwhere", "author":"Neil Gaiman", "rating":"5"}'`
+    - Returns a list of questions in the given category, success value, total number of questions, and current category. 
+    - Request argument: category id to be chosen
+    - Results are paginated in groups of 10. Include a request argument to choose page number, starting from 1. 
+- Sample: `curl "http://127.0.0.1:5000/categories/1/questions"`
+
 ```
 {
-  "books": [
+  "current_category": {
+    "id": 1, 
+    "type": "Science"
+  }, 
+  "questions": [
     {
-      "author": "Neil Gaiman",
-      "id": 24,
-      "rating": 5,
-      "title": "Neverwhere"
+      "answer": "The Liver", 
+      "category": 1, 
+      "difficulty": 4, 
+      "id": 20, 
+      "question": "What is the heaviest organ in the human body?"
+    }, 
+    {
+      "answer": "Alexander Fleming", 
+      "category": 1, 
+      "difficulty": 3, 
+      "id": 21, 
+      "question": "Who discovered penicillin?"
+    }, 
+    
+    ...,  
+    
+    {
+      "answer": "a3", 
+      "category": 1, 
+      "difficulty": 1, 
+      "id": 28, 
+      "question": "q3"
     }
-  ],
-  "created": 24,
-  "success": true,
-  "total_books": 17
+  ], 
+  "success": true, 
+  "total_questions": 5
+}
+```
+
+#### POST /quizzes
+- General:
+    - Takes quiz category and previous questions parameters and returns a random questions within the given category, if provided, and that is not one of the previous questions.  
+
+- Sample: `curl -X POST "http://127.0.0.1:5000/quizzes" -H "Content-Type: application/json" -d '{"quiz_category":{"id": 1, "type": "Science"}, "previous_questions": []}'`
+
+```
+{
+  "question": {
+    "answer": "a1", 
+    "category": 1, 
+    "difficulty": 1, 
+    "id": 24, 
+    "question": "q1"
+  }, 
+  "success": true
 }
 ```
 
