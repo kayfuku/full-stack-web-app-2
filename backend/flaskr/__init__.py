@@ -145,24 +145,18 @@ def create_app(test_config=None):
     body = request.get_json()
 
     try:
-      # print('getting values..')
       new_question = body.get('question', None)
       new_answer = body.get('answer', None)
       new_category = body.get('category', None)
       new_difficulty = body.get('difficulty', None)
       search_term = body.get('search_term', None)
-      # print('converting types..')
       if new_difficulty:
         new_difficulty = int(new_difficulty)
 
       if search_term:
-        # print('searching.. {}'.format(search_term))
         selection = Question.query.order_by(Question.id).filter(Question.question.ilike('%{}%'.format(search_term))).all()
-        # print('len(selection):', len(selection))
-        # print('paginating..')
         current_questions = [question.format() for question in paginate_questions(request, selection)]
 
-        # print('return')
         return jsonify({
           'success': True, 
           'questions': current_questions, 
@@ -170,14 +164,12 @@ def create_app(test_config=None):
         })
 
       else:
-        # print('creating a question instance..')
         question = Question(
           question=new_question, 
           answer=new_answer, 
           category=new_category, 
           difficulty=new_difficulty
         )
-        # print('inserting the question instance..')
         question.insert()
         print('inserted.')
 
@@ -209,7 +201,6 @@ def create_app(test_config=None):
     current_questions = [question.format() for question in paginate_questions(request, selection)]
 
     current_category = Category.query.get(category_id)
-    # print('category:', current_category)
     if current_category is None:
       abort(400)
 
@@ -304,7 +295,7 @@ def create_app(test_config=None):
 
 
   @app.errorhandler(500)
-  def method_not_allowed(error):
+  def internal_server_error(error):
     return jsonify({
       "success": False, 
       "error": 500, 
