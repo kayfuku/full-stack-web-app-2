@@ -26,7 +26,7 @@ pip install -r requirements.txt
 
 This will install all of the required packages we selected within the `requirements.txt` file.
 
-##### Key Dependencies
+Key Dependencies:  
 
 - [Flask](http://flask.pocoo.org/)  is a lightweight backend microservices framework. Flask is required to handle requests and responses.
 
@@ -37,9 +37,13 @@ This will install all of the required packages we selected within the `requireme
 #### Database Setup  
 
 With Postgres running, restore a database using the trivia.psql file provided. From the backend folder in terminal run:
+
 ```bash
+createdb trivia
 psql trivia < trivia.psql
 ```
+
+Set the database name, ```database_name = "trivia"```, on line 6 in models.py.  
 
 #### Running the server
 
@@ -99,6 +103,8 @@ python test_flaskr.py
 ```
 
 The first time you run the tests, omit the dropdb command. 
+
+The database name is already set to ```trivia_test``` on line 17 in test_flaskr.py. 
 
 All tests are kept in that file and should be maintained as updates are made to app functionality. 
 
@@ -274,10 +280,10 @@ The API will return three error types when requests fail:
 ## Deployment N/A
 
 ## Authors
-Yours truly, Coach Caryn 
+kei (kayfuku) + Udacity
 
 ## Acknowledgements 
-The awesome team at Udacity and all of the students, soon to be full stack extraordinaires! 
+The awesome team at Udacity and peer students!  
 
 
 
