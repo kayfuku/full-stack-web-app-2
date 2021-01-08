@@ -91,7 +91,7 @@ npm start
 
 By default, the frontend will run on localhost:3000. 
 
-### Tests  
+## Tests  
 
 In order to run tests navigate to the backend folder and run the following commands: 
 
