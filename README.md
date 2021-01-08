@@ -1,47 +1,100 @@
-# Full Stack API Final Project
+# Full Stack API Project
 
 ## Overview
 
-This project is based on the second project at Udacity, the Full Stack Web Developer Nanodegree program. I started this course because I wanted to learn how to design, develop, and deploy modern web applications and learn about Flask, React, Object-Relational Mapping (ORM), REST APIs, Identity Access Management (IAM), Docker, Kubernetes, AWS, etc.  
+This project is based on the second project on Udacity, the Full Stack Web Developer Nanodegree program. I started this course because I wanted to learn how to design, develop, and deploy modern web applications and learn about Flask, React, Object-Relational Mapping (ORM), REST APIs, Identity Access Management (IAM), Docker, Kubernetes, AWS, etc.  
 
 
 ## Getting Started
 
 ### Pre-requisites and Local Development 
-Developers using this project should already have Python3, pip and node installed on their local machines.
+Developers using this project should already have Python 3.7, pip and node installed on their local machines.
 
-#### Backend
+### Backend  
 
-From the backend folder run `pip install requirements.txt`. All required packages are included in the requirements file. 
+#### Virtual Enviornment
 
-To run the application run the following commands: 
+We recommend working within a virtual environment whenever using Python for projects. This keeps your dependencies for each project separate and organaized. Instructions for setting up a virual enviornment for your platform can be found in the [python docs](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/)
+
+#### PIP Dependencies
+
+Once you have your virtual environment setup and running, install dependencies by naviging to the `/backend` directory and running:
+
+```bash
+pip install -r requirements.txt
 ```
+
+This will install all of the required packages we selected within the `requirements.txt` file.
+
+##### Key Dependencies
+
+- [Flask](http://flask.pocoo.org/)  is a lightweight backend microservices framework. Flask is required to handle requests and responses.
+
+- [SQLAlchemy](https://www.sqlalchemy.org/) is the Python SQL toolkit and ORM we'll use handle the lightweight sqlite database. You'll primarily work in app.py and can reference models.py. 
+
+- [Flask-CORS](https://flask-cors.readthedocs.io/en/latest/#) is the extension we'll use to handle cross origin requests from our frontend server. 
+
+#### Database Setup  
+
+With Postgres running, restore a database using the trivia.psql file provided. From the backend folder in terminal run:
+```bash
+psql trivia < trivia.psql
+```
+
+#### Running the server
+
+From within the `backend` directory first ensure you are working using your created virtual environment.
+
+To run the server, execute:
+
+```bash
 export FLASK_APP=flaskr
 export FLASK_ENV=development
 flask run
 ```
 
-These commands put the application in development and directs our application to use the `__init__.py` file in our flaskr folder. Working in development mode shows an interactive debugger in the console and restarts the server whenever changes are made. If running locally on Windows, look for the commands in the [Flask documentation](http://flask.pocoo.org/docs/1.0/tutorial/factory/).
+Setting the `FLASK_ENV` variable to `development` will detect file changes and restart the server automatically.
+
+Setting the `FLASK_APP` variable to `flaskr` directs flask to use the `flaskr` directory and the `__init__.py` file to find the application. 
+
+If running locally on Windows, look for the commands in the [Flask documentation](http://flask.pocoo.org/docs/1.0/tutorial/factory/).
 
 The application is run on `http://127.0.0.1:5000/` by default and is a proxy in the frontend configuration. 
 
-#### Frontend
+### Frontend  
 
-From the frontend folder, run the following commands to start the client: 
+#### Installing Node and NPM
+
+This project depends on Nodejs and Node Package Manager (NPM). Before continuing, you must download and install Node (the download includes NPM) from [https://nodejs.com/en/download](https://nodejs.org/en/download/).
+
+#### Installing project dependencies
+
+This project uses NPM to manage software dependencies. NPM Relies on the package.json file located in the `frontend` directory of this repository. After cloning, open your terminal and run:
+
+```bash
+npm install
 ```
-npm install // only once to install dependencies
-npm start 
+
+#### Running Frontend
+
+The frontend app was built using create-react-app. In order to run the app in development mode use ```npm start```. You can change the script in the ```package.json``` file. 
+
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser. The page will reload if you make edits.<br>
+
+```bash
+npm start
 ```
 
 By default, the frontend will run on localhost:3000. 
 
-### Tests
+### Tests  
+
 In order to run tests navigate to the backend folder and run the following commands: 
 
 ```
-dropdb bookshelf_test
-createdb bookshelf_test
-psql bookshelf_test < books.psql
+dropdb trivia_test
+createdb trivia_test
+psql trivia_test < trivia.psql
 python test_flaskr.py
 ```
 
