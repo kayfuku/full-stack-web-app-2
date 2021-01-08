@@ -128,68 +128,196 @@ The API will return three error types when requests fail:
 - 404: Resource Not Found
 - 422: Not Processable 
 
-### Endpoints 
-#### GET /books
+### Endpoints  
+#### GET /categories
 - General:
-    - Returns a list of book objects, success value, and total number of books
-    - Results are paginated in groups of 8. Include a request argument to choose page number, starting from 1. 
-- Sample: `curl http://127.0.0.1:5000/books`
+    - Returns a list of categories, and success value. 
+    - Results are paginated in groups of 10. Include a request argument to choose page number, starting from 1. 
+- Sample: `curl "http://127.0.0.1:5000/categories"`
 
 ``` {
-  "books": [
+  "categories": [
     {
-      "author": "Stephen King",
-      "id": 1,
-      "rating": 5,
-      "title": "The Outsider: A Novel"
-    },
+      "id": 1, 
+      "type": "Science"
+    }, 
     {
-      "author": "Lisa Halliday",
-      "id": 2,
-      "rating": 5,
-      "title": "Asymmetry: A Novel"
-    },
+      "id": 2, 
+      "type": "Art"
+    }, 
     {
-      "author": "Kristin Hannah",
-      "id": 3,
-      "rating": 5,
-      "title": "The Great Alone"
-    },
+      "id": 3, 
+      "type": "Geography"
+    }, 
     {
-      "author": "Tara Westover",
-      "id": 4,
-      "rating": 5,
-      "title": "Educated: A Memoir"
-    },
+      "id": 4, 
+      "type": "History"
+    }, 
     {
-      "author": "Jojo Moyes",
-      "id": 5,
-      "rating": 5,
-      "title": "Still Me: A Novel"
-    },
+      "id": 5, 
+      "type": "Entertainment"
+    }, 
     {
-      "author": "Leila Slimani",
-      "id": 6,
-      "rating": 5,
-      "title": "Lullaby"
-    },
-    {
-      "author": "Amitava Kumar",
-      "id": 7,
-      "rating": 5,
-      "title": "Immigrant, Montana"
-    },
-    {
-      "author": "Madeline Miller",
-      "id": 8,
-      "rating": 5,
-      "title": "CIRCE"
+      "id": 6, 
+      "type": "Sports"
     }
-  ],
-"success": true,
-"total_books": 18
+  ], 
+  "success": true
 }
 ```
+
+#### GET /questions?page=<page_number>
+- General:
+    - Returns a list of questions, success value, total number of the questions, current category, and all categories. 
+    - Results are paginated in groups of 10. Include a request argument to choose page number, starting from 1. 
+- Sample: `curl "http://127.0.0.1:5000/questions?page=1"`
+
+```
+{
+  "categories": [
+    {
+      "id": 1, 
+      "type": "Science"
+    }, 
+    {
+      "id": 2, 
+      "type": "Art"
+    }, 
+    {
+      "id": 3, 
+      "type": "Geography"
+    }, 
+    {
+      "id": 4, 
+      "type": "History"
+    }, 
+    {
+      "id": 5, 
+      "type": "Entertainment"
+    }, 
+    {
+      "id": 6, 
+      "type": "Sports"
+    }
+  ], 
+  "current_category": [], 
+  "questions": [
+    {
+      "answer": "Apollo 13", 
+      "category": 5, 
+      "difficulty": 4, 
+      "id": 2, 
+      "question": "What movie earned Tom Hanks his third straight Oscar nomination, in 1996?"
+    }, 
+    {
+      "answer": "Maya Angelou", 
+      "category": 4, 
+      "difficulty": 2, 
+      "id": 5, 
+      "question": "Whose autobiography is entitled 'I Know Why the Caged Bird Sings'?"
+    },  
+    
+    ...,  
+    
+    {
+      "answer": "Agra", 
+      "category": 3, 
+      "difficulty": 2, 
+      "id": 15, 
+      "question": "The Taj Mahal is located in which Indian city?"
+    }
+  ], 
+  "success": true, 
+  "total_questions": 22
+}
+```
+
+#### DELETE /questions/<question_id>
+- General:  
+    - Deletes the qustion of the given ID if it exists. Returns the id of the deleted question, success value, total questions, and question list based on current page number to update the frontend. 
+    - Request argument: question id to be deleted
+- Sample: `curl -X DELETE "http://127.0.0.1:5000/questions/1"`
+
+```
+{
+  "deleted": 26, 
+  "questions": [
+    {
+      "answer": "Apollo 13", 
+      "category": 5, 
+      "difficulty": 4, 
+      "id": 2, 
+      "question": "What movie earned Tom Hanks his third straight Oscar nomination, in 1996?"
+    }, 
+    {
+      "answer": "Maya Angelou", 
+      "category": 4, 
+      "difficulty": 2, 
+      "id": 5, 
+      "question": "Whose autobiography is entitled 'I Know Why the Caged Bird Sings'?"
+    }, 
+        
+    ...,  
+  
+    {
+      "answer": "Agra", 
+      "category": 3, 
+      "difficulty": 2, 
+      "id": 15, 
+      "question": "The Taj Mahal is located in which Indian city?"
+    }
+  ], 
+  "success": true, 
+  "total_questions": 21
+}
+```
+
+#### POST /questions
+- General:
+    - Creates a new question using the submitted statement, answer, difficulty and category. Returns the id of the created question, success value, total questions, and question list based on current page number to update the frontend. 
+- Sample: `curl -X POST "http://127.0.0.1:5000/questions" -H "Content-Type: application/json" -d '{"question":"q3", "answer":"a3", "difficulty":"1", "category":"1"}'`
+
+```
+{
+  "created": 28, 
+  "questions": [
+    {
+      "answer": "Apollo 13", 
+      "category": 5, 
+      "difficulty": 4, 
+      "id": 2, 
+      "question": "What movie earned Tom Hanks his third straight Oscar nomination, in 1996?"
+    }, 
+    {
+      "answer": "Maya Angelou", 
+      "category": 4, 
+      "difficulty": 2, 
+      "id": 5, 
+      "question": "Whose autobiography is entitled 'I Know Why the Caged Bird Sings'?"
+    }, 
+        
+    ...,  
+  
+    {
+      "answer": "Agra", 
+      "category": 3, 
+      "difficulty": 2, 
+      "id": 15, 
+      "question": "The Taj Mahal is located in which Indian city?"
+    }
+  ], 
+  "success": true, 
+  "total_questions": 22
+}
+
+
+
+
+
+
+
+
+
 
 #### POST /books
 - General:
@@ -208,71 +336,6 @@ The API will return three error types when requests fail:
   "created": 24,
   "success": true,
   "total_books": 17
-}
-```
-#### DELETE /books/{book_id}
-- General:
-    - Deletes the book of the given ID if it exists. Returns the id of the deleted book, success value, total books, and book list based on current page number to update the frontend. 
-- `curl -X DELETE http://127.0.0.1:5000/books/16?page=2`
-```
-{
-  "books": [
-    {
-      "author": "Gina Apostol",
-      "id": 9,
-      "rating": 5,
-      "title": "Insurrecto: A Novel"
-    },
-    {
-      "author": "Tayari Jones",
-      "id": 10,
-      "rating": 5,
-      "title": "An American Marriage"
-    },
-    {
-      "author": "Jordan B. Peterson",
-      "id": 11,
-      "rating": 5,
-      "title": "12 Rules for Life: An Antidote to Chaos"
-    },
-    {
-      "author": "Kiese Laymon",
-      "id": 12,
-      "rating": 1,
-      "title": "Heavy: An American Memoir"
-    },
-    {
-      "author": "Emily Giffin",
-      "id": 13,
-      "rating": 4,
-      "title": "All We Ever Wanted"
-    },
-    {
-      "author": "Jose Andres",
-      "id": 14,
-      "rating": 4,
-      "title": "We Fed an Island"
-    },
-    {
-      "author": "Rachel Kushner",
-      "id": 15,
-      "rating": 1,
-      "title": "The Mars Room"
-    }
-  ],
-  "deleted": 16,
-  "success": true,
-  "total_books": 15
-}
-```
-#### PATCH /books/{book_id}
-- General:
-    - If provided, updates the rating of the specified book. Returns the success value and id of the modified book. 
-- `curl http://127.0.0.1:5000/books/15 -X PATCH -H "Content-Type: application/json" -d '{"rating":"1"}'`
-```
-{
-  "id": 15,
-  "success": true
 }
 ```
 
