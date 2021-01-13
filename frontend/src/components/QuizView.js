@@ -48,6 +48,7 @@ class QuizView extends Component {
     if (this.state.currentQuestion.id) { 
       previousQuestions.push(this.state.currentQuestion.id)
     }
+    console.log("previousQuestions", previousQuestions);
 
     $.ajax({
       url: '/quizzes', //TODO: update request URL
@@ -84,7 +85,7 @@ class QuizView extends Component {
     const formatGuess = this.state.guess.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").toLowerCase()
     let evaluate = this.evaluateAnswer()
     this.setState({
-      numCorrect: !evaluate ? this.state.numCorrect : this.state.numCorrect + 1,
+      numCorrect: evaluate ? this.state.numCorrect + 1 : this.state.numCorrect,
       showAnswer: true,
     })
   }
@@ -177,8 +178,8 @@ class QuizView extends Component {
         )
   }
 
-
   render() {
+    // console.log('test')
     return this.state.quizCategory
         ? this.renderPlay()
         : this.renderPrePlay()

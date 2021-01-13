@@ -237,15 +237,28 @@ def create_app(test_config=None):
 
         previous_questions = body.get('previous_questions', None)
         quiz_category = body.get('quiz_category', None)
+        print('previous_questions:', previous_questions)
+        print('quiz_category:', quiz_category)
 
         if quiz_category is None:
             abort(400)
 
         try:
-            questions = Question.query\
-                .filter_by(category=quiz_category['id'])\
+            query_filtered = None
+            if quiz_category['id'] != 0:
+                # A specific category was selected by user.
+                query_filtered = Question.query\
+                    .filter_by(category=quiz_category['id'])
+            else:
+                # ALL was selected by user.
+                query_filtered = Question.query
+
+            questions = query_filtered\
+                .filter(Question.question != None, Question.answer != None)\
                 .filter(~Question.id.in_(previous_questions))\
                 .all()
+
+            print('len(questions):', len(questions))
 
             question = None
             if len(questions) > 0:
