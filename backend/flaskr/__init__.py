@@ -251,7 +251,8 @@ def create_app(test_config=None):
                 query_filtered = Question.query
 
             questions = query_filtered\
-                .filter(Question.question != None, Question.answer != None)\
+                .filter(Question.question is not None,
+                        Question.answer is not None)\
                 .filter(~Question.id.in_(previous_questions))\
                 .all()
 
