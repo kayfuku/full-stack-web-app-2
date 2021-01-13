@@ -175,7 +175,6 @@ def create_app(test_config=None):
                     difficulty=new_difficulty
                 )
                 question.insert()
-                print('inserted.')
 
                 selection = Question.query.order_by(Question.id).all()
                 current_questions = [
@@ -237,8 +236,6 @@ def create_app(test_config=None):
 
         previous_questions = body.get('previous_questions', None)
         quiz_category = body.get('quiz_category', None)
-        print('previous_questions:', previous_questions)
-        print('quiz_category:', quiz_category)
 
         if quiz_category is None:
             abort(400)
@@ -258,8 +255,6 @@ def create_app(test_config=None):
                 .filter(~Question.id.in_(previous_questions))\
                 .all()
 
-            print('len(questions):', len(questions))
-
             question = None
             if len(questions) > 0:
                 question = random.choice(questions).format()
@@ -273,10 +268,10 @@ def create_app(test_config=None):
             abort(422)
 
     '''
-  @TODO:
-  Create error handlers for all expected errors
-  including 404 and 422.
-  '''
+    @TODO:
+    Create error handlers for all expected errors
+    including 404 and 422.
+    '''
     @app.errorhandler(404)
     def not_found(error):
         return jsonify({
