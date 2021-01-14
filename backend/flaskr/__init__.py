@@ -1,5 +1,6 @@
 import os
-from flask import Flask, request, abort, jsonify
+import traceback
+from flask import Flask, request, abort, jsonify, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import random
@@ -11,7 +12,7 @@ QUESTIONS_PER_PAGE = 10
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__)
-    setup_db(app)
+    db = setup_db(app)
 
     '''
     @TODO: Set up CORS. Allow '*' for origins. Delete the sample route after
@@ -56,6 +57,17 @@ def create_app(test_config=None):
         end = start + QUESTIONS_PER_PAGE
 
         return selection[start:end]
+
+        items_limit = request.args.get('limit', 10, type=int)
+
+        # Alternative way for pagination.
+        # items_limit = request.args.get('limit', 10, type=int)
+        # selected_page = request.args.get('page', 1, type=int)
+        # current_index = selected_page - 1
+        # questions = \
+        #     Question.query.order_by(
+        #         Question.id
+        #     ).limit(items_limit).offset(current_index * items_limit).all()
 
     @app.route('/questions', methods=['GET'])
     def get_questions():
@@ -118,7 +130,12 @@ def create_app(test_config=None):
                     'total_questions': len(Question.query.all())
                 })
 
-            except:
+            except Exception as ex:
+                flash(
+                    'An error occurred. Question id ' + question_id +
+                    ' could not be deleted.')
+                db.session.rollback()
+                traceback.print_exc()
                 abort(422)
 
     @app.route('/questions', methods=['POST'])
@@ -144,6 +161,8 @@ def create_app(test_config=None):
         '''
 
         body = request.get_json()
+        if body is None:
+            abort(400)
 
         try:
             new_question = body.get('question', None)
@@ -188,7 +207,10 @@ def create_app(test_config=None):
                     'total_questions': len(Question.query.all())
                 })
 
-        except:
+        except Exception as ex:
+            flash('An error occurred. New question could not be created.')
+            db.session.rollback()
+            traceback.print_exc()
             abort(422)
 
     @app.route('/categories/<int:category_id>/questions', methods=['GET'])
@@ -265,7 +287,10 @@ def create_app(test_config=None):
                 'question': question
             })
 
-        except:
+        except Exception as ex:
+            flash('An error occurred. Questions could not be retrieved.')
+            db.session.rollback()
+            traceback.print_exc()
             abort(422)
 
     '''
