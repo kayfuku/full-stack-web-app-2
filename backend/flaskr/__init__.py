@@ -58,8 +58,6 @@ def create_app(test_config=None):
 
         return selection[start:end]
 
-        items_limit = request.args.get('limit', 10, type=int)
-
         # Alternative way for pagination.
         # items_limit = request.args.get('limit', 10, type=int)
         # selected_page = request.args.get('page', 1, type=int)
